@@ -1,0 +1,52 @@
+# CupidGPT QLoRA training config
+# Tuned for RTX 4060 Ti (16GB VRAM) + Qwen3-8B-Instruct via Unsloth.
+
+model:
+  name: unsloth/Qwen3-8B-Instruct-bnb-4bit
+  max_seq_length: 2048
+  load_in_4bit: true
+
+lora:
+  r: 16
+  alpha: 32
+  dropout: 0.0
+  target_modules:
+    - q_proj
+    - k_proj
+    - v_proj
+    - o_proj
+    - gate_proj
+    - up_proj
+    - down_proj
+  use_rslora: false
+  use_gradient_checkpointing: unsloth
+
+data:
+  train_path: data/processed/train.jsonl
+  val_path: data/processed/val.jsonl
+  system_prompt: |
+    You are CupidGPT, a witty, kind, conversational assistant who helps people
+    write good dating-app replies. Be playful but never creepy or pushy. Match
+    the casual register of the person you're replying to. Keep responses short
+    unless asked for more.
+
+training:
+  output_dir: checkpoints/cupidgpt-qwen3-8b
+  num_train_epochs: 2
+  per_device_train_batch_size: 2
+  gradient_accumulation_steps: 8
+  learning_rate: 2.0e-4
+  warmup_ratio: 0.05
+  lr_scheduler_type: cosine
+  optim: adamw_8bit
+  weight_decay: 0.01
+  max_grad_norm: 1.0
+  logging_steps: 10
+  save_steps: 200
+  eval_steps: 200
+  bf16: true
+  seed: 42
+
+wandb:
+  project: cupidgpt
+  run_name: qwen3-8b-qlora-v1

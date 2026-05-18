@@ -216,3 +216,18 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# CupidGPT
+data/raw/
+data/processed/
+data/cache/
+checkpoints/
+outputs/
+models/
+wandb/
+*.gguf
+*.safetensors
+*.bin
+*.pt
+*.ckpt
+.hf_cache/

@@ -1,0 +1,33 @@
+[project]
+name = "cupidgpt"
+version = "0.1.0"
+description = "Fine-tuned Qwen3-8B for dating-app conversations"
+readme = "README.md"
+requires-python = ">=3.11,<3.13"
+license = { text = "MIT" }
+authors = [{ name = "ethank64" }]
+
+dependencies = [
+    "torch>=2.4.0",
+    "unsloth",
+    "transformers>=4.46.0",
+    "peft>=0.13.0",
+    "trl>=0.12.0",
+    "bitsandbytes>=0.44.0",
+    "accelerate>=1.0.0",
+    "datasets>=3.0.0",
+    "huggingface-hub>=0.26.0",
+    "wandb>=0.18.0",
+    "praw>=7.7.1",
+    "python-dotenv>=1.0.1",
+    "pyyaml>=6.0.2",
+    "tqdm>=4.66.0",
+    "gradio>=5.0.0",
+]
+
+[project.optional-dependencies]
+dev = ["ruff", "ipython"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
