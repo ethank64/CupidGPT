@@ -25,16 +25,34 @@ dependencies = [
     "gradio>=5.0.0",
 ]
 
-[project.optional-dependencies]
-dev = ["ruff", "ipython"]
+[dependency-groups]
+dev = [
+    "ruff>=0.7.0",
+    "ipython",
+]
 
-[build-system]
-requires = ["setuptools>=68"]
-build-backend = "setuptools.build_meta"
-
-[tool.setuptools]
-py-modules = []
+[tool.uv]
+package = false
 
 [tool.ruff]
 line-length = 100
 target-version = "py311"
+extend-exclude = [".venv", "checkpoints", "data/raw", "data/processed", "wandb"]
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "UP",  # pyupgrade
+    "SIM", # flake8-simplify
+]
+ignore = [
+    "E501", # line-too-long (formatter handles)
+]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"

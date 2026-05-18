@@ -57,7 +57,9 @@ def load_rodd() -> list[dict]:
             row = json.loads(line)
             # Try common shapes; fall back to skipping.
             instr = row.get("prompt") or row.get("input") or row.get("question") or row.get("post")
-            resp = row.get("response") or row.get("output") or row.get("answer") or row.get("comment")
+            resp = (
+                row.get("response") or row.get("output") or row.get("answer") or row.get("comment")
+            )
             if instr and resp:
                 pairs.append({"instruction": clean(instr), "response": clean(resp)})
     return pairs

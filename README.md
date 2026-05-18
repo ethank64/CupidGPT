@@ -28,22 +28,32 @@ docs/         writeup
 
 ## Quickstart
 
+Managed with [uv](https://docs.astral.sh/uv/). Install it once: `curl -LsSf https://astral.sh/uv/install.sh | sh`.
+
 ```bash
 # Inside WSL Ubuntu
-uv venv --python 3.11
-source .venv/bin/activate
-uv pip install -e .
+uv sync                        # creates .venv and installs all deps from uv.lock
 
-cp .env.example .env  # fill in REDDIT_*, HF_TOKEN, WANDB_API_KEY
+cp .env.example .env           # fill in REDDIT_*, HF_TOKEN, WANDB_API_KEY
 
-python data/download_rodd.py
-python data/scrape_reddit.py   # optional
-python data/prepare_dataset.py
+uv run python data/download_rodd.py
+uv run python data/scrape_reddit.py    # optional
+uv run python data/prepare_dataset.py
 
-python training/train_qlora.py --config training/config.yaml
-python inference/infer.py "She just said 'lol same' — what do I say?"
-python inference/merge_and_push.py --hub-id ethank64/CupidGPT
+uv run python training/train_qlora.py --config training/config.yaml
+uv run python inference/infer.py "She just said 'lol same' — what do I say?"
+uv run python inference/merge_and_push.py --hub-id ethank64/CupidGPT
 ```
+
+## Development
+
+```bash
+uv sync --all-groups           # includes dev deps (ruff, ipython)
+uv run ruff format .           # auto-format
+uv run ruff check .            # lint
+```
+
+CI runs `ruff format --check` and `ruff check` on every PR to `main`.
 
 ## Demo
 

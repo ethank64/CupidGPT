@@ -52,7 +52,7 @@ def main() -> None:
         do_sample=True,
         top_p=0.9,
     )
-    text = tokenizer.decode(out[0][inputs.shape[1]:], skip_special_tokens=True)
+    text = tokenizer.decode(out[0][inputs.shape[1] :], skip_special_tokens=True)
     print("\n--- CupidGPT ---")
     print(text)
 
