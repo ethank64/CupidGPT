@@ -11,7 +11,7 @@ from pathlib import Path
 
 from datasets import load_dataset
 
-RODD_REPO = "FabianLeibinger/RODD"
+RODD_REPO = "FabianLeibinger/Reddit-Online-Dating-Dataset-RODD"
 OUT_PATH = Path(__file__).parent / "raw" / "rodd.jsonl"
 
 
