@@ -48,7 +48,7 @@ def respond(message: str, history: list[dict], temperature: float, max_new_token
             top_p=0.9,
             pad_token_id=tokenizer.eos_token_id,
         )
-    return tokenizer.decode(out[0][inputs.shape[1]:], skip_special_tokens=True)
+    return tokenizer.decode(out[0][inputs.shape[1] :], skip_special_tokens=True)
 
 
 demo = gr.ChatInterface(

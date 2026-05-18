@@ -32,9 +32,7 @@ def format_row(row: dict, system_prompt: str, tokenizer) -> dict:
         {"role": "user", "content": row["instruction"]},
         {"role": "assistant", "content": row["response"]},
     ]
-    text = tokenizer.apply_chat_template(
-        messages, tokenize=False, add_generation_prompt=False
-    )
+    text = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=False)
     return {"text": text}
 
 

@@ -24,7 +24,7 @@ SUBREDDITS = [
     "Bumble",
     "hingeapp",
 ]
-POSTS_PER_SUB = 500   # cap so we stay tractable
+POSTS_PER_SUB = 500  # cap so we stay tractable
 MIN_COMMENT_LEN = 20
 MAX_COMMENT_LEN = 1500
 OUT_PATH = Path(__file__).parent / "raw" / "reddit.jsonl"
@@ -49,9 +49,7 @@ def main() -> None:
                 if not post.selftext or post.over_18:
                     continue
                 post.comments.replace_more(limit=0)
-                top_comments = sorted(
-                    post.comments, key=lambda c: c.score, reverse=True
-                )[:5]
+                top_comments = sorted(post.comments, key=lambda c: c.score, reverse=True)[:5]
                 for c in top_comments:
                     body = (c.body or "").strip()
                     if MIN_COMMENT_LEN <= len(body) <= MAX_COMMENT_LEN:
