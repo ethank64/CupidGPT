@@ -8,6 +8,11 @@ Outputs LoRA adapters to <output_dir>; merge separately via inference/merge_and_
 
 from __future__ import annotations
 
+# Unsloth must be imported before trl / transformers / peft so its patches land.
+# ruff: isort skip
+from unsloth import FastLanguageModel  # isort: skip
+from unsloth.chat_templates import get_chat_template  # isort: skip
+
 import argparse
 import os
 from pathlib import Path
@@ -16,8 +21,6 @@ import yaml
 from datasets import load_dataset
 from dotenv import load_dotenv
 from trl import SFTConfig, SFTTrainer
-from unsloth import FastLanguageModel
-from unsloth.chat_templates import get_chat_template
 
 
 def parse_args() -> argparse.Namespace:
@@ -50,7 +53,7 @@ def main() -> None:
         max_seq_length=cfg["model"]["max_seq_length"],
         load_in_4bit=cfg["model"]["load_in_4bit"],
     )
-    tokenizer = get_chat_template(tokenizer, chat_template="qwen-2.5")
+    tokenizer = get_chat_template(tokenizer, chat_template="qwen3-instruct")
 
     model = FastLanguageModel.get_peft_model(
         model,
