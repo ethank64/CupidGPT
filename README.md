@@ -1,8 +1,8 @@
 # CupidGPT
 
-A fine-tuned LLM that responds like a real Redditor giving dating advice. Built on `Qwen3-8B-Instruct`, fine-tuned with QLoRA on `(post → top comment)` pairs reconstructed from the [RODD](https://huggingface.co/datasets/FabianLeibinger/Reddit-Online-Dating-Dataset-RODD) dataset (218k posts from r/dating_advice, r/dating, r/OnlineDating, etc.) with the missing reply half pulled in via PRAW.
+A fine-tuned LLM that responds like a real Redditor giving relationship advice. Built on `Qwen3-8B-Instruct`, fine-tuned with QLoRA on `(parent comment → top-scoring reply)` pairs mined from [HuggingFaceGECLM/REDDIT_comments](https://huggingface.co/datasets/HuggingFaceGECLM/REDDIT_comments) — specifically the ~38.9M-comment `r/relationship_advice` subset.
 
-Stock chat models give safe, sanitized relationship advice that sounds like an HR memo. CupidGPT learns from how people actually answer dating questions on Reddit, which is — for better and worse — a lot more direct.
+Stock chat models give safe, sanitized relationship advice that sounds like an HR memo. CupidGPT learns from how people actually answer relationship questions on Reddit, which is — for better and worse — a lot more direct.
 
 ## Hardware
 
@@ -12,7 +12,7 @@ Trained on a single **RTX 4060 Ti (16GB VRAM)** inside WSL2 Ubuntu. The whole pi
 
 - **Base model:** [`Qwen/Qwen3-8B-Instruct`](https://huggingface.co/Qwen)
 - **Training:** [Unsloth](https://github.com/unslothai/unsloth) + QLoRA (4-bit, LoRA adapters)
-- **Data:** RODD posts + top comments fetched via PRAW (`data/fetch_rodd_comments.py`)
+- **Data:** `r/relationship_advice` comment-thread pairs from `HuggingFaceGECLM/REDDIT_comments` (built end-to-end by `data/build_dataset.py`)
 - **Tracking:** Weights & Biases
 - **Demo:** Gradio on Hugging Face Spaces
 
@@ -34,12 +34,10 @@ Managed with [uv](https://docs.astral.sh/uv/). Install it once: `curl -LsSf http
 # Inside WSL Ubuntu
 uv sync                        # creates .venv and installs all deps from uv.lock
 
-cp .env.example .env           # fill in REDDIT_*, HF_TOKEN, (optional) WANDB_API_KEY
+cp .env.example .env           # fill in HF_TOKEN, (optional) WANDB_API_KEY
 
-uv run python data/download_rodd.py                        # ~219k posts
-uv run python data/fetch_rodd_comments.py --limit 500      # smoke-test fetch first
-uv run python data/fetch_rodd_comments.py                  # full fetch (resumable, hours-long)
-uv run python data/prepare_dataset.py                      # join → train/val JSONL
+uv run python data/build_dataset.py --shards 1             # smoke test on first shard
+uv run python data/build_dataset.py                        # full build → train/val JSONL
 
 uv run python training/train_qlora.py --config training/config.yaml
 uv run python inference/infer.py "She just said 'lol same' — what do I say?"
