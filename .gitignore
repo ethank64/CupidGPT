@@ -225,6 +225,8 @@ checkpoints/
 outputs/
 models/
 wandb/
+unsloth_compiled_cache/
+training.log
 *.gguf
 *.safetensors
 *.bin
